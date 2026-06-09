@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TapLove — Wear it. Feel it. Keep it.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #FAF7F2; --warm-white: #FFFDF9; --ink: #1A1612;
+      --muted: #8A7F74; --rose: #C4806A; --rose-light: #E8C4B8;
+      --rose-pale: #F5EAE5; --gold: #B89A6A; --gold-light: #E8D9C0;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-weight: 300; overflow-x: hidden; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 4rem; transition: background 0.4s ease;
+    }
+    nav.scrolled { background: rgba(250,247,242,0.92); backdrop-filter: blur(12px); }
+    .nav-logo { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--rose); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-white); background: var(--ink); border: none; padding: 0.65rem 1.6rem; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--rose); }
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+    .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 10rem 4rem 6rem; }
+    .hero-eyebrow { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+    .hero-title { font-family: var(--serif); font-size: clamp(3.5rem, 5vw, 5.5rem); font-weight: 300; line-height: 1.08; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards; }
+    .hero-title em { font-style: italic; color: var(--rose); }
+    .hero-sub { font-size: 1rem; line-height: 1.75; color: var(--muted); max-width: 38ch; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards; }
+    .hero-actions { display: flex; align-items: center; gap: 2rem; opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards; }
+    .btn-primary { display: inline-block; padding: 1rem 2.5rem; background: var(--ink); color: var(--warm-white); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: background 0.25s, transform 0.25s; }
+    .btn-primary:hover { background: var(--rose); transform: translateY(-2px); }
+    .btn-ghost { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--gold-light); padding-bottom: 2px; transition: color 0.2s; }
+    .btn-ghost:hover { color: var(--ink); }
+    .hero-right { background: var(--rose-pale); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .bracelet-visual { position: relative; width: 280px; height: 280px; opacity: 0; animation: scaleIn 1s ease 0.6s forwards; }
+    .bracelet-ring { position: absolute; inset: 0; border-radius: 50%; border: 16px solid var(--rose-light); box-shadow: 0 30px 80px rgba(196,128,106,0.25); }
+    .bracelet-tag { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80px; height: 80px; background: var(--warm-white); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(26,22,18,0.12); gap: 4px; }
+    .bracelet-tag-icon { font-size: 1.5rem; }
+    .bracelet-tag-label { font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose); }
+    .orbit-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--rose); animation: orbit 8s linear infinite; }
+    .orbit-dot:nth-child(2) { animation-delay: -2.67s; background: var(--gold); }
+    .orbit-dot:nth-child(3) { animation-delay: -5.33s; background: var(--rose-light); }
+    .float-card { position: absolute; background: var(--warm-white); border: 1px solid var(--gold-light); padding: 1rem 1.25rem; max-width: 200px; box-shadow: 0 12px 40px rgba(26,22,18,0.08); }
+    .float-card.card-1 { top: 10%; right: 6%; opacity: 0; animation: fadeUp 0.8s ease 1.2s forwards, float 5s ease-in-out 2s infinite; }
+    .float-card.card-2 { bottom: 12%; left: 4%; opacity: 0; animation: fadeUp 0.8s ease 1.4s forwards, float 5s ease-in-out 2.5s infinite; }
+    .float-card-from { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose); margin-bottom: 0.4rem; }
+    .float-card-text { font-family: var(--serif); font-size: 0.88rem; font-style: italic; line-height: 1.5; }
+    .section { padding: 8rem 4rem; max-width: 1200px; margin: 0 auto; }
+    .section-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-bottom: 1rem; }
+    .section-title { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 300; line-height: 1.12; margin-bottom: 1.5rem; }
+    .section-title em { font-style: italic; color: var(--rose); }
+    .section-sub { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 50ch; }
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 5rem; }
+    .step { background: var(--warm-white); padding: 2.5rem 2rem; transition: transform 0.3s; }
+    .step:hover { transform: translateY(-4px); }
+    .step-num { font-family: var(--serif); font-size: 3.5rem; font-weight: 300; color: var(--rose-light); margin-bottom: 1rem; }
+    .step-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .step-title { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .step-text { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+    .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--gold-light), transparent); }
+    .dark-section { background: var(--ink); padding: 8rem 4rem; }
+    .dark-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .dark-title { font-family: var(--serif); font-size: clamp(2.5rem,4vw,3.8rem); font-weight: 300; color: var(--cream); line-height: 1.12; margin-bottom: 1.5rem; }
+    .dark-title em { font-style: italic; color: var(--rose-light); }
+    .dark-text { font-size: 1rem; color: rgba(250,247,242,0.6); line-height: 1.8; }
+    .use-cases { display: flex; flex-direction: column; gap: 1.25rem; }
+    .use-case { border-left: 2px solid var(--rose); padding: 1rem 1.25rem; background: rgba(255,255,255,0.03); transition: background 0.2s; }
+    .use-case:hover { background: rgba(196,128,106,0.08); }
+    .use-case-title { font-family: var(--serif); font-size: 1.05rem; color: var(--cream); margin-bottom: 0.3rem; }
+    .use-case-text { font-size: 0.82rem; color: rgba(250,247,242,0.45); line-height: 1.6; }
+    .cta-section { text-align: center; padding: 8rem 4rem; }
+    .cta-title { font-family: var(--serif); font-size: clamp(3rem,5vw,5rem); font-weight: 300; line-height: 1.1; margin-bottom: 1.5rem; }
+    .cta-title em { font-style: italic; color: var(--rose); }
+    .cta-sub { font-size: 1rem; color: var(--muted); max-width: 45ch; margin: 0 auto 3rem; line-height: 1.7; }
+    .email-row { display: inline-flex; border: 1px solid var(--gold-light); background: var(--warm-white); }
+    .email-input { padding: 0.9rem 1.5rem; border: none; background: transparent; font-family: var(--sans); font-size: 0.9rem; color: var(--ink); outline: none; width: 280px; }
+    .email-input::placeholder { color: var(--muted); }
+    .email-btn { padding: 0.9rem 1.8rem; background: var(--rose); color: var(--warm-white); border: none; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+    .email-btn:hover { background: var(--ink); }
+    .demo-banner { background: var(--rose-pale); border: 1px solid var(--rose-light); padding: 1rem 2rem; text-align: center; margin: 0 4rem 0; }
+    .demo-banner-text { font-size: 0.85rem; color: var(--ink); }
+    .demo-banner-text a { color: var(--rose); text-decoration: none; font-weight: 500; }
+    footer { border-top: 1px solid var(--gold-light); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: var(--serif); font-size: 1.2rem; }
+    .footer-logo span { color: var(--rose); }
+    .footer-text { font-size: 0.75rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--rose); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+    @keyframes orbit { from { transform:rotate(0deg) translateX(140px) rotate(0deg); } to { transform:rotate(360deg) translateX(140px) rotate(-360deg); } }
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 2rem; } .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; } .hero-right { min-height: 50vh; }
+      .hero-left { padding: 8rem 2rem 4rem; } .steps { grid-template-columns: 1fr 1fr; }
+      .dark-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .section { padding: 5rem 2rem; } .dark-section { padding: 5rem 2rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .demo-banner { margin: 0 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="nav">
+    <a href="/" class="nav-logo">Tap<span>Love</span></a>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#moments">Who It's For</a></li>
+      <li><a href="#demo">Try Demo</a></li>
+    </ul>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  </nav>
+
+  <!-- Demo banner -->
+  <div style="padding-top: 80px;">
+    <div class="demo-banner" id="demo">
+      <p class="demo-banner-text">
+        🎯 &nbsp;<strong>Live Demo:</strong> &nbsp;
+        <a href="bracelet.html?slug=demo">Tap the demo bracelet</a> &nbsp;·&nbsp;
+        <a href="portal.html">View the portal</a> (login: demo / taplove2026)
+      </p>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">A new kind of wearable</p>
+      <h1 class="hero-title">Love they can<br><em>feel</em> every<br>single day.</h1>
+      <p class="hero-sub">A bracelet that connects your loved ones to handwritten notes from the people who care most. One tap. A world of love.</p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="bracelet-visual">
+        <div class="bracelet-ring"></div>
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
+        <div class="bracelet-tag">
+          <span class="bracelet-tag-icon">🤍</span>
+          <span class="bracelet-tag-label">tap me</span>
+        </div>
+      </div>
+      <div class="float-card card-1">
+        <p class="float-card-from">From: Mom</p>
+        <p class="float-card-text">"I think of you every single morning. You are my greatest joy."</p>
+      </div>
+      <div class="float-card card-2">
+        <p class="float-card-from">From: Dad</p>
+        <p class="float-card-text">"So proud of everything you're becoming."</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="background: var(--cream);">
+    <div class="section">
+      <p class="section-label reveal">How It Works</p>
+      <h2 class="section-title reveal reveal-delay-1">Simple enough to <em>feel</em> like magic.</h2>
+      <p class="section-sub reveal reveal-delay-2">Four steps from purchase to a moment your loved one will carry forever.</p>
+      <div class="steps">
+        <div class="step reveal reveal-delay-1"><div class="step-num">01</div><div class="step-icon">🎁</div><h3 class="step-title">Gift the bracelet</h3><p class="step-text">Choose a bracelet for your loved one. Each one arrives with a unique NFC tag linked to their private portal.</p></div>
+        <div class="step reveal reveal-delay-2"><div class="step-num">02</div><div class="step-icon">✍️</div><h3 class="step-title">Write love notes</h3><p class="step-text">You and anyone you invite can write notes anytime — birthdays, hard days, or just a quiet Tuesday morning.</p></div>
+        <div class="step reveal reveal-delay-3"><div class="step-num">03</div><div class="step-icon">📲</div><h3 class="step-title">They tap to receive</h3><p class="step-text">When they tap their phone to the bracelet, the latest note appears instantly. No app needed. Just a moment.</p></div>
+        <div class="step reveal reveal-delay-4"><div class="step-num">04</div><div class="step-icon">📖</div><h3 class="step-title">Notes live forever</h3><p class="step-text">Every note is archived. Years from now, they'll have a collection of love to look back on.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="moments" class="dark-section">
+    <div class="dark-inner">
+      <div>
+        <p class="section-label reveal" style="color: var(--rose-light);">Who It's For</p>
+        <h2 class="dark-title reveal reveal-delay-1">Made for the moments that <em>matter most.</em></h2>
+        <p class="dark-text reveal reveal-delay-2">TapLove was made for the distances that make us want to reach out but don't know how. This is how.</p>
+      </div>
+      <div class="use-cases">
+        <div class="use-case reveal reveal-delay-1"><h4 class="use-case-title">The College Send-Off</h4><p class="use-case-text">Your daughter is leaving home for the first time. Give her something to tap when she misses you.</p></div>
+        <div class="use-case reveal reveal-delay-2"><h4 class="use-case-title">The Long Deployment</h4><p class="use-case-text">He's serving overseas. Let the whole family leave notes he can tap anytime he needs a reminder of home.</p></div>
+        <div class="use-case reveal reveal-delay-3"><h4 class="use-case-title">The Hard Season</h4><p class="use-case-text">She's going through treatment. A dozen people love her. Now they all have a way to say so — every day.</p></div>
+        <div class="use-case reveal reveal-delay-4"><h4 class="use-case-title">Just Because</h4><p class="use-case-text">Sometimes love doesn't need a reason. A bracelet for your partner, your parent, your best friend.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="waitlist" class="cta-section">
+    <p class="section-label reveal">Early Access</p>
+    <h2 class="cta-title reveal reveal-delay-1">Be first to give<br>a <em>love tap.</em></h2>
+    <p class="cta-sub reveal reveal-delay-2">We're opening early access to a small group of founding members. Join the waitlist and we'll reach out when your bracelet is ready.</p>
+    <div class="reveal reveal-delay-3">
+      <div class="email-row">
+        <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" />
+        <button class="email-btn" id="emailBtn">Reserve My Spot</button>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem; font-size:0.75rem; color:var(--muted);" class="reveal reveal-delay-4">No spam. No pressure. Just love.</p>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Tap<span>Love</span></div>
+    <p class="footer-text">© 2026 TapLove. Made with love.</p>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+    document.getElementById('emailBtn').addEventListener('click', () => {
+      const input = document.getElementById('emailInput');
+      if (input.value.includes('@')) {
+        document.getElementById('emailBtn').textContent = "You're on the list ✓";
+        document.getElementById('emailBtn').style.background = '#4a7c59';
+        input.disabled = true;
+      } else {
+        input.style.outline = '1px solid var(--rose)';
+        setTimeout(() => input.style.outline = '', 1000);
+      }
+    });
+  </script>
+</body>
+</html>
