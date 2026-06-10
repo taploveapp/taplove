@@ -147,6 +147,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
   const { createClient } = supabase;
   const db = createClient(JB_CONFIG.SUPABASE_URL, JB_CONFIG.SUPABASE_ANON_KEY);
   let adminData = { waitlist: [], bracelets: [], notes: [], reactions: [] };
@@ -345,6 +346,8 @@
       row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
     });
   }
-</script>
+
+  });
+  </script>
 </body>
 </html>
