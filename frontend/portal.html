@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TapLove — Portal</title>
+  <title>Just Because — Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
@@ -183,7 +183,7 @@
 <!-- LOGIN -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-box">
-    <div class="login-logo">Tap<span>Love</span></div>
+    <div class="login-logo">just <span>because</span></div>
     <div class="login-sub">Portal Sign In</div>
     <div class="login-field">
       <label class="login-label">Username</label>
@@ -195,7 +195,7 @@
     </div>
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <p class="login-error" id="loginError">Invalid credentials. Please try again.</p>
-    <p class="login-hint">Demo credentials: demo / taplove2026</p>
+    <p class="login-hint">Demo credentials: demo / justbecause2026</p>
   </div>
 </div>
 
@@ -227,7 +227,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <div class="sidebar-logo">Tap<span>Love</span></div>
+      <div class="sidebar-logo">just <span>because</span></div>
       <div class="sidebar-tagline">Love Portal</div>
     </div>
     <div class="bracelet-pill">
@@ -296,7 +296,7 @@
       }
     } catch (e) {
       // Fallback for demo without backend
-      if (username === 'demo' && password === 'taplove2026') {
+      if (username === 'demo' && password === 'justbecause2026') {
         session = { owner_name: 'Adam', bracelet_slug: 'demo' };
         braceletSlug = 'demo';
         document.getElementById('loginOverlay').style.display = 'none';
@@ -518,7 +518,7 @@
   }
 
   // Check if already logged in from session
-  const savedSession = sessionStorage.getItem('taplove_session');
+  const savedSession = sessionStorage.getItem('justbecause_session');
   if (savedSession) {
     session = JSON.parse(savedSession);
     document.getElementById('loginOverlay').style.display = 'none';
