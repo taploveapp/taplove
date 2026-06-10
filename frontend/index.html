@@ -364,7 +364,11 @@
     </ul>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="config.js"></script>
   <script>
+  document.addEventListener('DOMContentLoaded', function() {
+
     // Nav scroll
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
@@ -375,7 +379,7 @@
     }, { threshold: 0.13 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // Waitlist email — saves to Supabase
+    // Waitlist — saves to Supabase
     const { createClient } = supabase;
     const db = createClient(JB_CONFIG.SUPABASE_URL, JB_CONFIG.SUPABASE_ANON_KEY);
 
@@ -412,19 +416,21 @@
       'card-6': { from: 'From: Alex',         text: "You've got this. We all believe in you.",                       date: '5 days ago' },
     };
 
+    let selectedEmoji = null;
+
     function getKey(el) {
       return Array.from(el.classList).find(c => c.startsWith('card-'));
     }
 
-    document.querySelectorAll('.float-card').forEach(card => {
-      card.addEventListener('click', () => expandCard(card));
-    });
+    function closeOverlay() {
+      document.getElementById('cardOverlay').classList.remove('open');
+    }
 
-    // Expand card
     function expandCard(card) {
       const key = getKey(card);
       const d = cardData[key];
       if (!d) return;
+      selectedEmoji = null;
       document.getElementById('expFrom').textContent = d.from;
       document.getElementById('expText').textContent = d.text;
       document.getElementById('expDate').textContent = d.date;
@@ -432,21 +438,18 @@
       document.getElementById('cardTextInput').value = '';
       document.getElementById('cardConfirm').classList.remove('show');
       document.querySelectorAll('.card-rxn-btn').forEach(b => { b.classList.remove('sent'); b.style.display = ''; });
-      selectedEmoji = null;
       document.getElementById('cardOverlay').classList.add('open');
     }
 
-    function closeOverlay() {
-      document.getElementById('cardOverlay').classList.remove('open');
-    }
+    document.querySelectorAll('.float-card').forEach(card => {
+      card.addEventListener('click', () => expandCard(card));
+    });
 
     document.getElementById('cardCloseBtn').addEventListener('click', closeOverlay);
     document.getElementById('cardOverlay').addEventListener('click', e => {
       if (e.target === document.getElementById('cardOverlay')) closeOverlay();
     });
 
-    // Reactions — select and slide open text panel
-    let selectedEmoji = null;
     document.querySelectorAll('.card-rxn-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.card-rxn-btn').forEach(b => b.classList.remove('sent'));
@@ -468,7 +471,7 @@
 
     document.getElementById('cardSendBtn').addEventListener('click', sendAndClose);
     document.getElementById('cardSkipBtn').addEventListener('click', sendAndClose);
+
+  });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="config.js"></script>
 </html>
