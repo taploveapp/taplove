@@ -19,17 +19,12 @@
     html { scroll-behavior: smooth; }
     body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-weight: 300; overflow-x: hidden; }
 
-    /* DEMO BANNER */
-    .demo-banner { background: var(--ink); color: var(--warm-white); padding: 0.6rem 2rem; display: flex; align-items: center; justify-content: center; gap: 1.25rem; font-size: 0.72rem; letter-spacing: 0.05em; position: fixed; top: 0; left: 0; right: 0; z-index: 200; }
-    .demo-banner a { color: var(--rose-light); text-decoration: none; border-bottom: 1px solid rgba(232,196,184,0.35); padding-bottom: 1px; transition: border-color 0.2s; }
-    .demo-banner a:hover { border-color: var(--rose-light); }
-    .demo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rose); flex-shrink: 0; animation: blink 2s ease-in-out infinite; }
-    .demo-sep { color: rgba(255,255,255,0.2); }
+
 
     /* NAV */
-    nav { position: fixed; top: 36px; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 4rem; transition: background 0.4s, backdrop-filter 0.4s; }
-    nav.scrolled { background: rgba(250,247,242,0.92); backdrop-filter: blur(12px); }
-    .nav-logo { font-family: var(--serif); font-size: 1.4rem; font-style: italic; color: var(--ink); text-decoration: none; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 4rem; background: var(--cream); transition: backdrop-filter 0.4s; }
+    nav.scrolled { backdrop-filter: blur(12px); background: rgba(250,247,242,0.92); }
+    .nav-logo { font-family: var(--serif); font-size: 1.75rem; font-style: italic; color: var(--ink); text-decoration: none; }
     .nav-logo span { color: var(--rose); font-style: normal; }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
     .nav-links a { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
@@ -38,8 +33,8 @@
     .nav-cta:hover { background: var(--rose); }
 
     /* HERO */
-    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 36px; }
-    .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 10rem 4rem 6rem; }
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; }
+    .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4rem 6rem; }
     .hero-eyebrow { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
     .hero-title { font-family: var(--serif); font-size: clamp(3.5rem,5vw,5.5rem); font-weight: 300; line-height: 1.08; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards; }
     .hero-title em { font-style: italic; color: var(--rose); }
@@ -52,21 +47,49 @@
 
     /* HERO RIGHT */
     .hero-right { background: var(--rose-pale); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .hero-right::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 60% 40%, rgba(196,128,106,0.15) 0%, transparent 70%); }
-    .bracelet-visual { position: relative; width: 300px; height: 300px; opacity: 0; animation: scaleIn 1s ease 0.6s forwards; }
+    .hero-right::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 60% 40%, rgba(196,128,106,0.15) 0%, transparent 70%); pointer-events: none; }
+
+    /* BRACELET */
+    .bracelet-visual { position: relative; width: 300px; height: 300px; opacity: 0; animation: scaleIn 1s ease 0.6s forwards; flex-shrink: 0; }
     .bracelet-ring { position: absolute; inset: 0; border-radius: 50%; border: 18px solid var(--rose-light); box-shadow: 0 30px 80px rgba(196,128,106,0.25); }
-    .bracelet-tag { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 84px; height: 84px; background: var(--warm-white); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(26,22,18,0.12); gap: 4px; }
-    .bracelet-tag-icon { font-size: 1.5rem; }
-    .bracelet-tag-label { font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose); }
+    .bracelet-tag { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 84px; height: 84px; background: var(--warm-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(26,22,18,0.12); }
     .orbit-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--rose); animation: orbit 8s linear infinite; }
     .orbit-dot:nth-child(2) { animation-delay: -2.67s; background: var(--gold); }
     .orbit-dot:nth-child(3) { animation-delay: -5.33s; background: var(--rose-light); }
-    .float-card { position: absolute; background: var(--warm-white); border: 1px solid var(--gold-light); padding: 1.1rem 1.3rem; max-width: 210px; box-shadow: 0 12px 40px rgba(26,22,18,0.08); }
-    .float-card.card-1 { top: 10%; right: 6%; opacity: 0; animation: fadeUp 0.8s ease 1.2s forwards, float 5s ease-in-out 2s infinite; }
-    .float-card.card-2 { bottom: 12%; left: 4%; opacity: 0; animation: fadeUp 0.8s ease 1.4s forwards, float 5s ease-in-out 2.5s infinite; }
+
+    /* FLOAT CARDS */
+    .float-card { position: absolute; background: var(--warm-white); border: 1px solid var(--gold-light); padding: 1.1rem 1.3rem; max-width: 185px; box-shadow: 0 12px 40px rgba(26,22,18,0.08); cursor: pointer; user-select: none; transition: box-shadow 0.2s, transform 0.2s; z-index: 10; }
+    .float-card:hover { box-shadow: 0 16px 48px rgba(26,22,18,0.14); transform: translateY(-3px); }
+    .float-card.card-1 { top: 6%;  right: 8%;  opacity: 0; animation: fadeUp 0.8s ease 1.2s forwards, float 5.2s ease-in-out 2s   infinite; }
+    .float-card.card-2 { bottom: 8%;  left: 6%;  opacity: 0; animation: fadeUp 0.8s ease 1.4s forwards, float 4.8s ease-in-out 2.5s infinite; }
+    .float-card.card-3 { top: 38%; left: 8%;  opacity: 0; animation: fadeUp 0.8s ease 1.6s forwards, float 6.1s ease-in-out 1.8s infinite; }
+    .float-card.card-4 { bottom: 22%; right: 6%;  opacity: 0; animation: fadeUp 0.8s ease 1.8s forwards, float 5.5s ease-in-out 1.2s infinite; }
+    .float-card.card-5 { top: 18%; left: 14%; opacity: 0; animation: fadeUp 0.8s ease 2.0s forwards, float 5.8s ease-in-out 3.0s infinite; }
+    .float-card.card-6 { top: 52%; right: 10%; opacity: 0; animation: fadeUp 0.8s ease 2.2s forwards, float 6.4s ease-in-out 2.2s infinite; }
     .float-card-from { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose); margin-bottom: 0.4rem; }
-    .float-card-text { font-family: var(--serif); font-size: 0.88rem; font-style: italic; line-height: 1.5; color: var(--ink); }
-    .float-card-date { font-size: 0.6rem; color: var(--muted); margin-top: 0.4rem; }
+    .float-card-text { font-family: var(--serif); font-size: 0.86rem; font-style: italic; line-height: 1.5; color: var(--ink); }
+    .float-card-date { font-size: 0.58rem; color: var(--muted); margin-top: 0.4rem; }
+
+    /* EXPANDED CARD OVERLAY */
+    .card-overlay { position: absolute; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: rgba(245,234,229,0.75); backdrop-filter: blur(4px); }
+    .card-overlay.open { display: flex; }
+    .card-expanded { background: var(--warm-white); border: 1px solid var(--gold-light); padding: 2.5rem; width: 92%; max-width: 380px; position: relative; box-shadow: 0 20px 60px rgba(26,22,18,0.15); animation: expandIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .card-expanded::before, .card-expanded::after { content: ''; position: absolute; width: 14px; height: 14px; border-color: var(--gold); border-style: solid; }
+    .card-expanded::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .card-expanded::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+    .card-close-btn { position: absolute; top: 0.75rem; right: 0.85rem; font-size: 1rem; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; line-height: 1; transition: color 0.2s; }
+    .card-close-btn:hover { color: var(--ink); }
+    .card-exp-from { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose); margin-bottom: 0.85rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--gold-light); }
+    .card-exp-text { font-family: var(--serif); font-size: 1.15rem; font-style: italic; line-height: 1.6; color: var(--ink); margin-bottom: 1.25rem; }
+    .card-exp-text::before { content: '\201C'; color: var(--rose-light); font-size: 2rem; line-height: 0; vertical-align: -0.4rem; font-style: normal; margin-right: 0.05em; }
+    .card-exp-text::after { content: '\201D'; color: var(--rose-light); font-size: 2rem; line-height: 0; vertical-align: -0.4rem; font-style: normal; margin-left: 0.05em; }
+    .card-exp-date { font-size: 0.62rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .card-reactions { display: flex; gap: 0.5rem; }
+    .card-rxn-btn { flex: 1; padding: 0.6rem 0; border: 1px solid var(--gold-light); background: transparent; font-size: 1.1rem; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+    .card-rxn-btn:hover { background: var(--rose-pale); border-color: var(--rose-light); }
+    .card-rxn-btn.sent { background: var(--rose-pale); border-color: var(--rose); animation: rxnPop 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .card-sent-msg { text-align: center; font-size: 0.7rem; color: var(--rose); margin-top: 0.75rem; letter-spacing: 0.08em; opacity: 0; transition: opacity 0.3s; min-height: 1rem; }
+    .card-sent-msg.show { opacity: 1; }
 
     /* SECTIONS */
     .section-wrap { padding: 8rem 4rem; max-width: 1200px; margin: 0 auto; }
@@ -74,8 +97,6 @@
     .section-title { font-family: var(--serif); font-size: clamp(2.5rem,4vw,3.8rem); font-weight: 300; line-height: 1.12; margin-bottom: 1.5rem; }
     .section-title em { font-style: italic; color: var(--rose); }
     .section-sub { font-size: 0.95rem; color: var(--muted); line-height: 1.8; max-width: 50ch; }
-
-    /* STEPS */
     .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 5rem; }
     .step { background: var(--warm-white); padding: 2.5rem 2rem; transition: transform 0.3s; }
     .step:hover { transform: translateY(-4px); }
@@ -83,10 +104,9 @@
     .step-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
     .step-title { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.6rem; }
     .step-text { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
-
     .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--gold-light), transparent); }
 
-    /* DARK */
+    /* DARK SECTION */
     .dark-section { background: var(--ink); padding: 8rem 4rem; }
     .dark-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
     .dark-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose-light); margin-bottom: 1rem; }
@@ -136,15 +156,34 @@
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .rd1{transition-delay:0.08s;} .rd2{transition-delay:0.16s;} .rd3{transition-delay:0.24s;} .rd4{transition-delay:0.32s;}
 
+    /* ANIMATIONS */
     @keyframes fadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
     @keyframes scaleIn { from{opacity:0;transform:scale(0.85);}to{opacity:1;transform:scale(1);} }
     @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
     @keyframes orbit { from{transform:rotate(0deg) translateX(150px) rotate(0deg);}to{transform:rotate(360deg) translateX(150px) rotate(-360deg);} }
-    @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.4;} }
+
+    .card-text-panel { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, margin 0.35s ease; margin-top: 0; }
+    .card-text-panel.open { max-height: 160px; opacity: 1; margin-top: 0.85rem; }
+    .card-text-label { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    .card-text-input { width: 100%; background: var(--cream); border: 1px solid var(--gold-light); padding: 0.75rem 0.9rem; font-family: var(--serif); font-size: 0.95rem; font-style: italic; color: var(--ink); resize: none; outline: none; height: 70px; line-height: 1.5; transition: border-color 0.2s; }
+    .card-text-input::placeholder { color: var(--rose-light); }
+    .card-text-input:focus { border-color: var(--rose-light); }
+    .card-send-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .card-send-btn { flex: 1; padding: 0.65rem; background: var(--ink); color: var(--warm-white); border: none; font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+    .card-send-btn:hover { background: var(--rose); }
+    .card-skip-btn { padding: 0.65rem 1rem; background: transparent; color: var(--muted); border: 1px solid var(--gold-light); font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: color 0.2s; }
+    .card-skip-btn:hover { color: var(--ink); }
+    .card-confirm { display: none; flex-direction: column; align-items: center; gap: 0.4rem; padding: 1.25rem 0 0.25rem; text-align: center; }
+    .card-confirm.show { display: flex; }
+    .card-confirm-icon { font-size: 1.6rem; animation: rxnPop 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .card-confirm-title { font-family: var(--serif); font-size: 1.05rem; font-style: italic; color: var(--ink); }
+    .card-confirm-sub { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.05em; }
+    @keyframes expandIn { from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);} }
+    @keyframes rxnPop { 0%{transform:scale(1);}40%{transform:scale(1.3);}70%{transform:scale(0.95);}100%{transform:scale(1);} }
 
     @media(max-width:900px){
       nav{padding:1.5rem 2rem;} .nav-links{display:none;}
-      .hero{grid-template-columns:1fr;} .hero-right{min-height:55vw;} .hero-left{padding:9rem 2rem 4rem;}
+      .hero{grid-template-columns:1fr;} .hero-right{min-height:55vw;} .hero-left{padding:5rem 2rem 4rem;}
       .steps{grid-template-columns:1fr 1fr;} .dark-inner{grid-template-columns:1fr;gap:3rem;}
       .features-grid{grid-template-columns:1fr 1fr;}
       .section-wrap{padding:5rem 2rem;} .dark-section{padding:5rem 2rem;} .cta-section{padding:5rem 2rem;}
@@ -154,15 +193,6 @@
   </style>
 </head>
 <body>
-
-  <div class="demo-banner">
-    <div class="demo-dot"></div>
-    <span>Live demo —</span>
-    <a href="bracelet.html?slug=demo">Try the bracelet experience</a>
-    <span class="demo-sep">·</span>
-    <a href="portal.html">View the portal</a>
-    <span style="color:rgba(255,255,255,0.28);">(demo / taplove2026)</span>
-  </div>
 
   <nav id="nav">
     <a href="/" class="nav-logo">just <span>because</span></a>
@@ -184,25 +214,82 @@
         <a href="#how" class="btn-ghost">See how it works</a>
       </div>
     </div>
-    <div class="hero-right">
+    <div class="hero-right" id="heroRight">
+
+      <!-- Bracelet -->
       <div class="bracelet-visual">
         <div class="bracelet-ring"></div>
-        <div class="orbit-dot"></div><div class="orbit-dot"></div><div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
         <div class="bracelet-tag">
-          <span class="bracelet-tag-icon">🤍</span>
-          <span class="bracelet-tag-label">tap me</span>
+          <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <text x="30" y="38" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="#C4806A" letter-spacing="-0.5">jb</text>
+          </svg>
         </div>
       </div>
-      <div class="float-card card-1">
-        <p class="float-card-from">From: Mom</p>
-        <p class="float-card-text">"I think of you every single morning. You are my greatest joy."</p>
+
+      <!-- Floating cards -->
+      <div class="float-card card-1" data-key="card-1">
+        <p class="float-card-from">From: Sarah</p>
+        <p class="float-card-text">"Thinking of you today and every day."</p>
         <p class="float-card-date">Today, 6:42 AM</p>
       </div>
-      <div class="float-card card-2">
-        <p class="float-card-from">From: Dad</p>
+      <div class="float-card card-2" data-key="card-2">
+        <p class="float-card-from">From: Marcus</p>
         <p class="float-card-text">"So proud of everything you're becoming."</p>
         <p class="float-card-date">Yesterday</p>
       </div>
+      <div class="float-card card-3" data-key="card-3">
+        <p class="float-card-from">From: Grandma Ruth</p>
+        <p class="float-card-text">"You are the light of this whole family."</p>
+        <p class="float-card-date">2 days ago</p>
+      </div>
+      <div class="float-card card-4" data-key="card-4">
+        <p class="float-card-from">From: Jordan</p>
+        <p class="float-card-text">"Rooting for you always. Don't forget that."</p>
+        <p class="float-card-date">3 days ago</p>
+      </div>
+      <div class="float-card card-5" data-key="card-5">
+        <p class="float-card-from">From: Maya</p>
+        <p class="float-card-text">"Checked in on you today. Hope you felt it."</p>
+        <p class="float-card-date">4 days ago</p>
+      </div>
+      <div class="float-card card-6" data-key="card-6">
+        <p class="float-card-from">From: Alex</p>
+        <p class="float-card-text">"You've got this. We all believe in you."</p>
+        <p class="float-card-date">5 days ago</p>
+      </div>
+
+      <!-- Expanded card overlay -->
+      <div class="card-overlay" id="cardOverlay">
+        <div class="card-expanded">
+          <button class="card-close-btn" id="cardCloseBtn">✕</button>
+          <div class="card-exp-from" id="expFrom">From: Sarah</div>
+          <p class="card-exp-text" id="expText">Thinking of you today and every day.</p>
+          <div class="card-exp-date" id="expDate">Today, 6:42 AM</div>
+          <div class="card-reactions">
+            <button class="card-rxn-btn" data-emoji="❤️">❤️</button>
+            <button class="card-rxn-btn" data-emoji="🤗">🤗</button>
+            <button class="card-rxn-btn" data-emoji="😊">😊</button>
+            <button class="card-rxn-btn" data-emoji="🙏">🙏</button>
+          </div>
+          <div class="card-text-panel" id="cardTextPanel">
+            <p class="card-text-label">Add a few words — optional</p>
+            <textarea class="card-text-input" id="cardTextInput" placeholder="I needed this today…" maxlength="200"></textarea>
+            <div class="card-send-row">
+              <button class="card-send-btn" id="cardSendBtn">Send just because</button>
+              <button class="card-skip-btn" id="cardSkipBtn">Just the reaction</button>
+            </div>
+          </div>
+          <div class="card-confirm" id="cardConfirm">
+            <div class="card-confirm-icon">💌</div>
+            <p class="card-confirm-title" id="cardConfirmTitle">Sarah will feel that.</p>
+            <p class="card-confirm-sub">Sent just because.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -244,7 +331,7 @@
       <h2 class="section-title reveal rd1">Everything you need.<br><em>Nothing you don't.</em></h2>
       <div class="features-grid">
         <div class="feature reveal rd1"><div class="feature-icon">🔗</div><h3 class="feature-title">NFC Bracelet</h3><p class="feature-text">Beautifully crafted with a built-in NFC tag. Works with any modern iPhone or Android. No app required.</p><span class="feature-badge">Included with purchase</span></div>
-        <div class="feature reveal rd2"><div class="feature-icon">💌</div><h3 class="feature-title">Unlimited Notes</h3><p class="feature-text">Write as often as you like. Notes publish instantly and the bracelet always shows the most recent one.</p><span class="feature-badge">Included with purchase</span></div>
+        <div class="feature reveal rd2"><div class="feature-icon">💌</div><h3 class="feature-title">Notes to Get You Started</h3><p class="feature-text">Your bracelet comes with notes included to begin sending straight away. Additional notes available as you need them.</p><span class="feature-badge">Included with purchase</span></div>
         <div class="feature reveal rd3"><div class="feature-icon">🏛️</div><h3 class="feature-title">Living Archive</h3><p class="feature-text">Every note is saved — a growing collection of moments, searchable, browsable, and always theirs.</p><span class="feature-badge">Included with purchase</span></div>
         <div class="feature reveal rd1"><div class="feature-icon">👥</div><h3 class="feature-title">Invite Contributors</h3><p class="feature-text">Open the portal to family and friends so everyone who cares can leave a note — not just you.</p><span class="feature-badge">Premium</span></div>
         <div class="feature reveal rd2"><div class="feature-icon">📅</div><h3 class="feature-title">Scheduled Notes</h3><p class="feature-text">Write a birthday message today, schedule it to arrive on the day. Plan ahead for the moments that matter.</p><span class="feature-badge">Premium</span></div>
@@ -257,12 +344,12 @@
 
   <section id="waitlist" class="cta-section">
     <p class="section-label reveal">Early Access</p>
-    <h2 class="cta-title reveal rd1">Be first to give<br>a <em>just because.</em></h2>
+    <h2 class="cta-title reveal rd1">Be the first to send<br>something, <em>just because.</em></h2>
     <p class="cta-sub reveal rd2">We're opening early access to a small group of founding members. Join the waitlist and we'll reach out when your bracelet is ready.</p>
     <div class="reveal rd3">
       <div class="email-row">
         <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" />
-        <button class="email-btn" id="emailBtn" onclick="submitEmail()">Reserve My Spot</button>
+        <button class="email-btn" id="emailBtn">Reserve My Spot</button>
       </div>
     </div>
     <p style="margin-top:1.5rem;font-size:0.72rem;color:var(--muted);" class="reveal rd4">No pressure. No spam. Just a heads up when it's ready.</p>
@@ -278,18 +365,97 @@
   </footer>
 
   <script>
+    // Nav scroll
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+
+    // Scroll reveal
     const obs = new IntersectionObserver(es => {
-      es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
-    }, {threshold:0.13});
+      es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.13 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-    function submitEmail() {
+
+    // Waitlist email
+    document.getElementById('emailBtn').addEventListener('click', () => {
       const input = document.getElementById('emailInput');
       const btn = document.getElementById('emailBtn');
-      if(input.value.includes('@')){ btn.textContent="You're on the list ✓"; btn.style.background='#4a7c59'; input.disabled=true; btn.disabled=true; }
-      else { input.style.outline='1px solid var(--rose)'; setTimeout(()=>input.style.outline='',1000); }
+      if (input.value.includes('@')) {
+        btn.textContent = "You're on the list ✓";
+        btn.style.background = '#4a7c59';
+        input.disabled = true;
+        btn.disabled = true;
+      } else {
+        input.style.outline = '1px solid var(--rose)';
+        setTimeout(() => input.style.outline = '', 1000);
+      }
+    });
+
+    // ── EXPANDABLE FLOAT CARDS ──
+    const cardData = {
+      'card-1': { from: 'From: Sarah',        text: 'Thinking of you today and every day. You mean the world to me.', date: 'Today, 6:42 AM' },
+      'card-2': { from: 'From: Marcus',       text: "So proud of everything you're becoming.",                        date: 'Yesterday' },
+      'card-3': { from: 'From: Grandma Ruth', text: 'You are the light of this whole family.',                       date: '2 days ago' },
+      'card-4': { from: 'From: Jordan',       text: "Rooting for you always. Don't forget that.",                    date: '3 days ago' },
+      'card-5': { from: 'From: Maya',         text: 'Checked in on you today. Hope you felt it.',                    date: '4 days ago' },
+      'card-6': { from: 'From: Alex',         text: "You've got this. We all believe in you.",                       date: '5 days ago' },
+    };
+
+    function getKey(el) {
+      return Array.from(el.classList).find(c => c.startsWith('card-'));
     }
+
+    document.querySelectorAll('.float-card').forEach(card => {
+      card.addEventListener('click', () => expandCard(card));
+    });
+
+    // Expand card
+    function expandCard(card) {
+      const key = getKey(card);
+      const d = cardData[key];
+      if (!d) return;
+      document.getElementById('expFrom').textContent = d.from;
+      document.getElementById('expText').textContent = d.text;
+      document.getElementById('expDate').textContent = d.date;
+      document.getElementById('cardTextPanel').classList.remove('open');
+      document.getElementById('cardTextInput').value = '';
+      document.getElementById('cardConfirm').classList.remove('show');
+      document.querySelectorAll('.card-rxn-btn').forEach(b => { b.classList.remove('sent'); b.style.display = ''; });
+      selectedEmoji = null;
+      document.getElementById('cardOverlay').classList.add('open');
+    }
+
+    function closeOverlay() {
+      document.getElementById('cardOverlay').classList.remove('open');
+    }
+
+    document.getElementById('cardCloseBtn').addEventListener('click', closeOverlay);
+    document.getElementById('cardOverlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('cardOverlay')) closeOverlay();
+    });
+
+    // Reactions — select and slide open text panel
+    let selectedEmoji = null;
+    document.querySelectorAll('.card-rxn-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.card-rxn-btn').forEach(b => b.classList.remove('sent'));
+        btn.classList.add('sent');
+        selectedEmoji = btn.dataset.emoji;
+        document.getElementById('cardTextPanel').classList.add('open');
+        setTimeout(() => document.getElementById('cardTextInput').focus(), 400);
+      });
+    });
+
+    function sendAndClose() {
+      const senderName = document.getElementById('expFrom').textContent.replace('From: ', '');
+      document.getElementById('cardConfirmTitle').textContent = senderName + ' will feel that.';
+      document.getElementById('cardTextPanel').classList.remove('open');
+      document.querySelectorAll('.card-rxn-btn').forEach(b => b.style.display = 'none');
+      document.getElementById('cardConfirm').classList.add('show');
+      setTimeout(() => closeOverlay(), 2800);
+    }
+
+    document.getElementById('cardSendBtn').addEventListener('click', sendAndClose);
+    document.getElementById('cardSkipBtn').addEventListener('click', sendAndClose);
   </script>
 </body>
 </html>
