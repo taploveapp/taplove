@@ -108,7 +108,7 @@
     <div class="login-logo">just <span>because</span></div>
     <div class="login-sub">Admin Access</div>
     <input type="password" class="login-input" id="adminPass" placeholder="Admin password" />
-    <button class="login-btn" onclick="doLogin()">Enter</button>
+    <button class="login-btn" id="loginBtn">Enter</button>
     <p class="login-error" id="loginError">Incorrect password.</p>
   </div>
 </div>
@@ -120,13 +120,13 @@
       <div class="sidebar-badge">Admin</div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-item active" onclick="showSection('waitlist')"><span class="nav-icon">📋</span><span class="nav-label">Waitlist</span><span class="nav-count" id="waitlistCount">—</span></div>
-      <div class="nav-item" onclick="showSection('bracelets')"><span class="nav-icon">⭕</span><span class="nav-label">Bracelets</span><span class="nav-count" id="braceletCount">—</span></div>
-      <div class="nav-item" onclick="showSection('notes')"><span class="nav-icon">💌</span><span class="nav-label">All Notes</span><span class="nav-count" id="noteCount">—</span></div>
-      <div class="nav-item" onclick="showSection('reactions')"><span class="nav-icon">❤️</span><span class="nav-label">Reactions</span><span class="nav-count" id="reactionCount">—</span></div>
+      <div class="nav-item active" data-section="waitlist"><span class="nav-icon">📋</span><span class="nav-label">Waitlist</span><span class="nav-count" id="waitlistCount">—</span></div>
+      <div class="nav-item" data-section="bracelets"><span class="nav-icon">⭕</span><span class="nav-label">Bracelets</span><span class="nav-count" id="braceletCount">—</span></div>
+      <div class="nav-item" data-section="notes"><span class="nav-icon">💌</span><span class="nav-label">All Notes</span><span class="nav-count" id="noteCount">—</span></div>
+      <div class="nav-item" data-section="reactions"><span class="nav-icon">❤️</span><span class="nav-label">Reactions</span><span class="nav-count" id="reactionCount">—</span></div>
     </nav>
     <div class="sidebar-bottom">
-      <button class="signout-btn" onclick="logout()">Sign out</button>
+      <button class="signout-btn" id="signoutBtn">Sign out</button>
     </div>
   </aside>
 
@@ -155,6 +155,15 @@
 
   // ── AUTH ──
   document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('signoutBtn').addEventListener('click', logout);
+  document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      item.classList.add('active');
+      showSection(item.dataset.section);
+    });
+  });
 
   function doLogin() {
     const pass = document.getElementById('adminPass').value;
@@ -198,8 +207,6 @@
 
   function showSection(section) {
     currentSection = section;
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    event?.target?.closest('.nav-item')?.classList.add('active');
 
     const stats = `
       <div class="stats-row section-gap">
@@ -346,6 +353,11 @@
       row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
     });
   }
+
+    // Expose functions used in dynamic HTML to global scope
+    window.refreshAll = refreshAll;
+    window.downloadCSV = downloadCSV;
+    window.filterTable = filterTable;
 
   });
   </script>
