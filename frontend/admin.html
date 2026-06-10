@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just Because — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #FAF7F2; --warm-white: #FFFDF9; --ink: #1A1612;
+      --muted: #8A7F74; --rose: #C4806A; --rose-light: #E8C4B8;
+      --rose-pale: #F5EAE5; --gold: #B89A6A; --gold-light: #E8D9C0;
+      --green: #4a7c59; --green-pale: #EBF3EE;
+      --sidebar-w: 220px;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html, body { height: 100%; background: var(--cream); font-family: var(--sans); font-weight: 300; color: var(--ink); overflow-x: hidden; }
+    .app { display: flex; min-height: 100vh; }
+
+    /* LOGIN */
+    .login-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 200; display: flex; align-items: center; justify-content: center; }
+    .login-box { background: var(--cream); padding: 3rem; width: 100%; max-width: 360px; position: relative; }
+    .login-box::before, .login-box::after { content: ''; position: absolute; width: 16px; height: 16px; border-color: var(--gold); border-style: solid; }
+    .login-box::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .login-box::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+    .login-logo { font-family: var(--serif); font-size: 1.5rem; font-style: italic; text-align: center; margin-bottom: 0.3rem; }
+    .login-logo span { color: var(--rose); font-style: normal; }
+    .login-sub { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 2rem; }
+    .login-input { width: 100%; padding: 0.8rem 1rem; background: var(--warm-white); border: 1px solid var(--gold-light); font-family: var(--sans); font-size: 0.9rem; color: var(--ink); outline: none; margin-bottom: 1rem; transition: border-color 0.2s; }
+    .login-input:focus { border-color: var(--rose-light); }
+    .login-btn { width: 100%; padding: 0.9rem; background: var(--ink); color: var(--warm-white); border: none; font-family: var(--sans); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+    .login-btn:hover { background: var(--rose); }
+    .login-error { font-size: 0.72rem; color: var(--rose); text-align: center; margin-top: 0.75rem; display: none; }
+
+    /* SIDEBAR */
+    .sidebar { width: var(--sidebar-w); background: var(--ink); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 50; }
+    .sidebar-brand { padding: 1.75rem 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .sidebar-logo { font-family: var(--serif); font-size: 1.1rem; font-style: italic; color: var(--cream); }
+    .sidebar-logo span { color: var(--rose); font-style: normal; }
+    .sidebar-badge { font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--rose); background: rgba(196,128,106,0.15); padding: 0.2rem 0.6rem; display: inline-block; margin-top: 0.4rem; }
+    .sidebar-nav { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.75rem; cursor: pointer; transition: background 0.15s; border-radius: 2px; }
+    .nav-item:hover { background: rgba(255,255,255,0.05); }
+    .nav-item.active { background: rgba(196,128,106,0.12); }
+    .nav-icon { font-size: 0.9rem; width: 18px; text-align: center; }
+    .nav-label { font-size: 0.78rem; color: rgba(250,247,242,0.5); transition: color 0.15s; }
+    .nav-item:hover .nav-label, .nav-item.active .nav-label { color: var(--rose-light); }
+    .nav-count { margin-left: auto; font-size: 0.65rem; color: rgba(250,247,242,0.3); }
+    .sidebar-bottom { padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .signout-btn { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(250,247,242,0.25); background: none; border: none; cursor: pointer; font-family: var(--sans); transition: color 0.2s; }
+    .signout-btn:hover { color: var(--rose-light); }
+
+    /* MAIN */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--gold-light); background: var(--cream); position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-family: var(--serif); font-size: 1.3rem; }
+    .topbar-title em { font-style: italic; color: var(--rose); }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; font-size: 0.72rem; color: var(--muted); }
+    .content { flex: 1; padding: 1.75rem 2rem; }
+
+    /* PANEL */
+    .panel { background: var(--warm-white); border: 1px solid var(--gold-light); margin-bottom: 2px; }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--gold-light); }
+    .panel-title { font-family: var(--serif); font-size: 1.05rem; }
+    .panel-action { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose); background: none; border: 1px solid var(--rose-light); padding: 0.3rem 0.75rem; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
+    .panel-action:hover { background: var(--rose-pale); }
+
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-bottom: 2px; }
+    .stat-card { background: var(--warm-white); border: 1px solid var(--gold-light); padding: 1.25rem 1.5rem; }
+    .stat-value { font-family: var(--serif); font-size: 2.2rem; font-weight: 300; line-height: 1; margin-bottom: 0.25rem; }
+    .stat-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .stat-icon { font-size: 1rem; margin-bottom: 0.5rem; }
+
+    /* TABLE */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 1.5rem; text-align: left; border-bottom: 1px solid var(--gold-light); font-weight: 400; }
+    .data-table td { font-size: 0.82rem; padding: 0.85rem 1.5rem; border-bottom: 1px solid rgba(232,217,192,0.4); color: var(--ink); }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--cream); }
+    .badge { display: inline-block; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.5rem; }
+    .badge-pending { background: rgba(184,154,106,0.12); color: var(--gold); }
+    .badge-active { background: var(--green-pale); color: var(--green); }
+    .badge-live { background: var(--green-pale); color: var(--green); }
+    .badge-draft { background: rgba(26,22,18,0.05); color: var(--muted); }
+    .empty-row td { text-align: center; padding: 3rem; font-family: var(--serif); font-style: italic; color: var(--muted); }
+
+    /* SEARCH */
+    .search-input { padding: 0.5rem 1rem; border: 1px solid var(--gold-light); background: var(--cream); font-family: var(--sans); font-size: 0.82rem; color: var(--ink); outline: none; width: 220px; transition: border-color 0.2s; }
+    .search-input:focus { border-color: var(--rose-light); }
+
+    /* EXPORT BTN */
+    .export-btn { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid var(--gold-light); padding: 0.3rem 0.75rem; cursor: pointer; font-family: var(--sans); transition: all 0.2s; }
+    .export-btn:hover { color: var(--ink); border-color: var(--gold); }
+
+    .loading-text { padding: 2rem; text-align: center; font-family: var(--serif); font-style: italic; color: var(--muted); }
+    .section-gap { margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">just <span>because</span></div>
+    <div class="login-sub">Admin Access</div>
+    <input type="password" class="login-input" id="adminPass" placeholder="Admin password" />
+    <button class="login-btn" onclick="doLogin()">Enter</button>
+    <p class="login-error" id="loginError">Incorrect password.</p>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">just <span>because</span></div>
+      <div class="sidebar-badge">Admin</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showSection('waitlist')"><span class="nav-icon">📋</span><span class="nav-label">Waitlist</span><span class="nav-count" id="waitlistCount">—</span></div>
+      <div class="nav-item" onclick="showSection('bracelets')"><span class="nav-icon">⭕</span><span class="nav-label">Bracelets</span><span class="nav-count" id="braceletCount">—</span></div>
+      <div class="nav-item" onclick="showSection('notes')"><span class="nav-icon">💌</span><span class="nav-label">All Notes</span><span class="nav-count" id="noteCount">—</span></div>
+      <div class="nav-item" onclick="showSection('reactions')"><span class="nav-icon">❤️</span><span class="nav-label">Reactions</span><span class="nav-count" id="reactionCount">—</span></div>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="signout-btn" onclick="logout()">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 class="topbar-title">just <em>because</em> — Admin</h1>
+      <div class="topbar-right">
+        <span id="lastRefresh">—</span>
+        <button class="export-btn" onclick="refreshAll()">↻ Refresh</button>
+      </div>
+    </div>
+    <div class="content" id="mainContent">
+      <div class="loading-text">Loading admin data…</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+  const { createClient } = supabase;
+  const db = createClient(JB_CONFIG.SUPABASE_URL, JB_CONFIG.SUPABASE_ANON_KEY);
+  let adminData = { waitlist: [], bracelets: [], notes: [], reactions: [] };
+  let currentSection = 'waitlist';
+
+  // ── AUTH ──
+  document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  function doLogin() {
+    const pass = document.getElementById('adminPass').value;
+    if (pass === JB_CONFIG.ADMIN_PASSWORD) {
+      document.getElementById('loginOverlay').style.display = 'none';
+      loadAll();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      setTimeout(() => document.getElementById('loginError').style.display = 'none', 2500);
+    }
+  }
+
+  function logout() {
+    document.getElementById('loginOverlay').style.display = 'flex';
+    document.getElementById('adminPass').value = '';
+  }
+
+  // ── DATA ──
+  async function loadAll() {
+    const [w, b, n, r] = await Promise.all([
+      db.from('waitlist').select('*').order('created_at', { ascending: false }),
+      db.from('bracelets').select('*').order('created_at', { ascending: false }),
+      db.from('notes').select('*').order('created_at', { ascending: false }),
+      db.from('reactions').select('*').order('created_at', { ascending: false }),
+    ]);
+    adminData.waitlist   = w.data || [];
+    adminData.bracelets  = b.data || [];
+    adminData.notes      = n.data || [];
+    adminData.reactions  = r.data || [];
+
+    document.getElementById('waitlistCount').textContent  = adminData.waitlist.length;
+    document.getElementById('braceletCount').textContent  = adminData.bracelets.length;
+    document.getElementById('noteCount').textContent      = adminData.notes.length;
+    document.getElementById('reactionCount').textContent  = adminData.reactions.length;
+    document.getElementById('lastRefresh').textContent    = 'Updated ' + new Date().toLocaleTimeString();
+
+    showSection(currentSection);
+  }
+
+  async function refreshAll() { await loadAll(); }
+
+  function showSection(section) {
+    currentSection = section;
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    event?.target?.closest('.nav-item')?.classList.add('active');
+
+    const stats = `
+      <div class="stats-row section-gap">
+        <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value">${adminData.waitlist.length}</div><div class="stat-label">Waitlist Signups</div></div>
+        <div class="stat-card"><div class="stat-icon">⭕</div><div class="stat-value">${adminData.bracelets.length}</div><div class="stat-label">Bracelets</div></div>
+        <div class="stat-card"><div class="stat-icon">💌</div><div class="stat-value">${adminData.notes.length}</div><div class="stat-label">Total Notes</div></div>
+        <div class="stat-card"><div class="stat-icon">❤️</div><div class="stat-value">${adminData.reactions.length}</div><div class="stat-label">Reactions</div></div>
+      </div>`;
+
+    if (section === 'waitlist') renderWaitlist(stats);
+    else if (section === 'bracelets') renderBracelets(stats);
+    else if (section === 'notes') renderNotes(stats);
+    else if (section === 'reactions') renderReactions(stats);
+  }
+
+  function formatDate(d) {
+    return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) + ' ' + new Date(d).toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+  }
+
+  function downloadCSV(data, filename) {
+    if (!data.length) return;
+    const keys = Object.keys(data[0]);
+    const csv = [keys.join(','), ...data.map(row => keys.map(k => `"${(row[k]||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = filename;
+    a.click();
+  }
+
+  function renderWaitlist(stats) {
+    const rows = adminData.waitlist.length === 0
+      ? `<tr class="empty-row"><td colspan="3">No signups yet.</td></tr>`
+      : adminData.waitlist.map(w => `
+          <tr>
+            <td>${w.email}</td>
+            <td>${formatDate(w.created_at)}</td>
+            <td><span class="badge badge-${w.status}">${w.status}</span></td>
+          </tr>`).join('');
+
+    document.getElementById('mainContent').innerHTML = stats + `
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Waitlist Signups</h2>
+          <div style="display:flex;gap:0.5rem;">
+            <input type="text" class="search-input" placeholder="Search email…" oninput="filterTable(this,'waitlist-table')" />
+            <button class="export-btn" onclick="downloadCSV(adminData.waitlist,'waitlist.csv')">Export CSV</button>
+          </div>
+        </div>
+        <table class="data-table" id="waitlist-table">
+          <thead><tr><th>Email</th><th>Signed Up</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderBracelets(stats) {
+    const rows = adminData.bracelets.length === 0
+      ? `<tr class="empty-row"><td colspan="5">No bracelets registered yet.</td></tr>`
+      : adminData.bracelets.map(b => {
+          const noteCount = adminData.notes.filter(n => n.bracelet_id === b.id).length;
+          return `<tr>
+            <td><code style="font-size:0.75rem;background:var(--cream);padding:0.1rem 0.4rem;">${b.slug}</code></td>
+            <td>${b.wearer_name}</td>
+            <td>${b.owner_name || '—'}</td>
+            <td style="text-align:center;">${noteCount}</td>
+            <td><span class="badge badge-${b.status}">${b.status}</span></td>
+          </tr>`;
+        }).join('');
+
+    document.getElementById('mainContent').innerHTML = stats + `
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Registered Bracelets</h2>
+          <button class="export-btn" onclick="downloadCSV(adminData.bracelets,'bracelets.csv')">Export CSV</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Slug</th><th>Wearer</th><th>Owner</th><th style="text-align:center;">Notes</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderNotes(stats) {
+    const rows = adminData.notes.length === 0
+      ? `<tr class="empty-row"><td colspan="5">No notes written yet.</td></tr>`
+      : adminData.notes.map(n => {
+          const bracelet = adminData.bracelets.find(b => b.id === n.bracelet_id);
+          const preview = n.content.length > 60 ? n.content.substring(0,60) + '…' : n.content;
+          return `<tr>
+            <td>${n.author_name}</td>
+            <td style="font-family:var(--serif);font-style:italic;">"${preview}"</td>
+            <td>${bracelet?.wearer_name || '—'}</td>
+            <td><span class="badge badge-${n.status}">${n.status}</span></td>
+            <td>${formatDate(n.created_at)}</td>
+          </tr>`;
+        }).join('');
+
+    document.getElementById('mainContent').innerHTML = stats + `
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">All Notes</h2>
+          <div style="display:flex;gap:0.5rem;">
+            <input type="text" class="search-input" placeholder="Search notes…" oninput="filterTable(this,'notes-table')" />
+            <button class="export-btn" onclick="downloadCSV(adminData.notes,'notes.csv')">Export CSV</button>
+          </div>
+        </div>
+        <table class="data-table" id="notes-table">
+          <thead><tr><th>Author</th><th>Note</th><th>For</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderReactions(stats) {
+    const rows = adminData.reactions.length === 0
+      ? `<tr class="empty-row"><td colspan="4">No reactions yet.</td></tr>`
+      : adminData.reactions.map(r => {
+          const note = adminData.notes.find(n => n.id === r.note_id);
+          return `<tr>
+            <td style="font-size:1.3rem;">${r.emoji}</td>
+            <td>${r.message || <span style="color:var(--muted);font-style:italic;">Reaction only</span>}</td>
+            <td style="font-family:var(--serif);font-style:italic;color:var(--muted);">"${note?.content?.substring(0,40)||'—'}…"</td>
+            <td>${formatDate(r.created_at)}</td>
+          </tr>`;
+        }).join('');
+
+    document.getElementById('mainContent').innerHTML = stats + `
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Reactions & Replies</h2>
+          <button class="export-btn" onclick="downloadCSV(adminData.reactions,'reactions.csv')">Export CSV</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Reaction</th><th>Message</th><th>In Response To</th><th>Date</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function filterTable(input, tableId) {
+    const q = input.value.toLowerCase();
+    const rows = document.getElementById(tableId)?.querySelectorAll('tbody tr');
+    rows?.forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

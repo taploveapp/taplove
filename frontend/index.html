@@ -375,18 +375,30 @@
     }, { threshold: 0.13 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // Waitlist email
-    document.getElementById('emailBtn').addEventListener('click', () => {
+    // Waitlist email — saves to Supabase
+    const { createClient } = supabase;
+    const db = createClient(JB_CONFIG.SUPABASE_URL, JB_CONFIG.SUPABASE_ANON_KEY);
+
+    document.getElementById('emailBtn').addEventListener('click', async () => {
       const input = document.getElementById('emailInput');
       const btn = document.getElementById('emailBtn');
-      if (input.value.includes('@')) {
+      const email = input.value.trim();
+      if (!email.includes('@')) {
+        input.style.outline = '1px solid var(--rose)';
+        setTimeout(() => input.style.outline = '', 1000);
+        return;
+      }
+      btn.textContent = 'Saving…';
+      btn.disabled = true;
+      const { error } = await db.from('waitlist').insert({ email });
+      if (!error || error.code === '23505') {
         btn.textContent = "You're on the list ✓";
         btn.style.background = '#4a7c59';
         input.disabled = true;
-        btn.disabled = true;
       } else {
-        input.style.outline = '1px solid var(--rose)';
-        setTimeout(() => input.style.outline = '', 1000);
+        btn.textContent = 'Try again';
+        btn.disabled = false;
+        btn.style.background = 'var(--rose)';
       }
     });
 
@@ -457,5 +469,6 @@
     document.getElementById('cardSendBtn').addEventListener('click', sendAndClose);
     document.getElementById('cardSkipBtn').addEventListener('click', sendAndClose);
   </script>
-</body>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="config.js"></script>
 </html>
