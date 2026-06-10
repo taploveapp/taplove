@@ -470,7 +470,26 @@
   document.getElementById('publishBtn').addEventListener('click', async () => {
     const author = document.getElementById('authorName').value.trim();
     const content = document.getElementById('noteContent').value.trim();
-    if (!author || !content) return;
+    const btn = document.getElementById('publishBtn');
+
+    if (!author || !content) {
+      if (!author) document.getElementById('authorName').style.outline = '1px solid var(--rose)';
+      if (!content) document.getElementById('noteContent').style.outline = '1px solid var(--rose)';
+      setTimeout(() => {
+        document.getElementById('authorName').style.outline = '';
+        document.getElementById('noteContent').style.outline = '';
+      }, 1500);
+      return;
+    }
+
+    if (!braceletId) {
+      btn.textContent = 'Loading… try again';
+      setTimeout(() => btn.textContent = 'Publish Note', 2000);
+      return;
+    }
+
+    btn.textContent = 'Publishing…';
+    btn.disabled = true;
 
     const { data, error } = await db.from('notes').insert({
       bracelet_id: braceletId,
@@ -483,7 +502,13 @@
       allNotes.unshift(data);
       document.getElementById('modalActions').style.display = 'none';
       document.getElementById('publishSuccess').classList.add('show');
-      setTimeout(() => { closeModal(); renderDash(currentFilter); }, 2000);
+      setTimeout(() => { closeModal(); renderDash(currentFilter); btn.textContent = 'Publish Note'; btn.disabled = false; }, 2000);
+    } else {
+      console.error('Publish error:', error);
+      btn.textContent = 'Error — try again';
+      btn.style.background = 'var(--rose)';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Publish Note'; btn.style.background = ''; }, 3000);
     }
   });
 
