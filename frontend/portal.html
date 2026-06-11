@@ -521,6 +521,14 @@
     initPortal();
   }
 
+    // Expose functions used in inline HTML to global scope
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.setStatus = setStatus;
+    window.updateCount = updateCount;
+    window.renderDash = renderDash;
+    window.logout = logout;
+
   });
   </script>
 </body>
